@@ -19,7 +19,7 @@
 //  - Hooking up individual lights to individual arduino pins (the default)? Comment out the below #define line.
 //  - Using shift registers (use only 3 pins for all the lights)? Uncomment the below line
 
-#define USE_SHIFT_REGISTERS
+//#define USE_SHIFT_REGISTERS
 
 //Don't touch this next line please kthx
 #ifndef USE_SHIFT_REGISTERS
@@ -259,8 +259,8 @@ void readSerialLightingData() {
 
           case 4: //Byte 5: P1 gameplay button lights 7-12
             //I can almost certainly bitwise this to be more compact. Buuut, nah.
-            bitWrite(p1LEDs, 6, bitRead(receivedData, 6));
-            bitWrite(p1LEDs, 7, bitRead(receivedData, 7));
+            bitWrite(p1LEDs, 6, bitRead(receivedData, 0));
+            bitWrite(p1LEDs, 7, bitRead(receivedData, 1));
             break;
 
           //Bytes 6-7 are for more P1 gameplay buttons that we don't read
@@ -278,8 +278,8 @@ void readSerialLightingData() {
             break;
 
           case 10: //Byte 11: P2 gameplay button lights 7-12
-            bitWrite(p2LEDs, 6, bitRead(receivedData, 6));
-            bitWrite(p2LEDs, 7, bitRead(receivedData, 7));
+            bitWrite(p2LEDs, 6, bitRead(receivedData, 0));
+            bitWrite(p2LEDs, 7, bitRead(receivedData, 1));
             break;
 
           //Bytes 12-13 are for more P2 gameplay buttons we don't read
