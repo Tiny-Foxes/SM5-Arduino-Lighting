@@ -19,7 +19,12 @@
 //  - Hooking up individual lights to individual arduino pins (the default)? Comment out the below #define line.
 //  - Using shift registers (use only 3 pins for all the lights)? Uncomment the below line
 
-//#define USE_SHIFT_REGISTERS
+
+#define USE_SHIFT_REGISTERS
+
+
+
+
 
 //Don't touch this next line please kthx
 #ifndef USE_SHIFT_REGISTERS
@@ -50,13 +55,13 @@
 #define PIN_MARQUEE_2 A1 //Marquee up-right
 #define PIN_MARQUEE_3 A2 //Marquee down-left
 #define PIN_MARQUEE_4 A3 //Marquee down-right
-#define PIN_BASS A4 //Bass left
+#define PIN_BASS A4 //Bass left/right
 
 // Menu light pins
 #define PIN_P1_START 10 //P1 start button
-#define PIN_P1_MENU 11  //P1 menu buttons
+#define PIN_P1_MENU 11  //P1 left/right menu buttons
 #define PIN_P2_START 12 //P2 start button
-#define PIN_P2_MENU 13  //P2 menu buttons
+#define PIN_P2_MENU 13  //P2 left/right menu buttons
 
 
 
@@ -194,10 +199,10 @@ void writeShiftRegisterLighting() {
   // Add more shiftOut lines here if you want to add more shift registers
   //  (the first shiftOut line goes to the last shift register in the chain)
 
-  shiftOut(PIN_SHIFT_DATA, PIN_SHIFT_CLOCK, LSBFIRST, etcLEDs);
-  shiftOut(PIN_SHIFT_DATA, PIN_SHIFT_CLOCK, LSBFIRST, cabLEDs);
-  shiftOut(PIN_SHIFT_DATA, PIN_SHIFT_CLOCK, LSBFIRST, p2LEDs);
-  shiftOut(PIN_SHIFT_DATA, PIN_SHIFT_CLOCK, LSBFIRST, p1LEDs);
+  shiftOut(PIN_SHIFT_DATA, PIN_SHIFT_CLOCK, MSBFIRST, etcLEDs);
+  shiftOut(PIN_SHIFT_DATA, PIN_SHIFT_CLOCK, MSBFIRST, cabLEDs);
+  shiftOut(PIN_SHIFT_DATA, PIN_SHIFT_CLOCK, MSBFIRST, p2LEDs);
+  shiftOut(PIN_SHIFT_DATA, PIN_SHIFT_CLOCK, MSBFIRST, p1LEDs);
   
   digitalWrite(PIN_SHIFT_LATCH, HIGH);
 }
