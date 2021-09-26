@@ -73,9 +73,10 @@ If you want to control bigger lights, like 12V LED modules, an N-Channel MOSFET 
 [I'd **highly** recommend checking out this site](http://bildr.org/2012/03/rfp30n06le-arduino/) for a brief guide on how to properly hook up/use a MOSFET.
 
 Just wire a MOSFET up to each Arduino/Shift Register pin you want to have control a light, as below:
+
 ![MOSFET wiring diagram](/Wiring-MOSFET.png)
 
-And if you want to go even BIGGER than that and feel comfortable working with 120VAC? Look into using a Solid State Relay (SSR) to control high voltages - this is the tech some old DDR cabs use to turn on/off the neon sign transformers for the bass neons.
+And if you want to go even BIGGER than that? Look into using a Solid State Relay (SSR) to control high voltages - this is the tech some old DDR cabs use to turn on/off the neon sign transformers for the bass neons.
 
 
 
@@ -126,6 +127,6 @@ With SextetStreamToFile, Stepmania will write all the lighting data to a file yo
 ### Step 3: Enjoy!
 
 
+---
 
-
-> SM5-Arduino-Lighting (2021), by 48productions. Feel free to ask me any questions/comments on this project, either here or through Discord. I'm in a number of rhythm game-related servers.
+> SM5-Arduino-Lighting (2021), by 48productions. Feel free to ping me with any questions/comments on this project, either here or through Discord. I'm in a number of rhythm game-related servers, like Project Outfox's official discord.
