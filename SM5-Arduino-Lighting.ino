@@ -236,58 +236,81 @@ void readSerialLightingData() {
 #endif
       } else {
 
+        /* *******************************************
+         * ** SHIFT REGISTER MAPPING CUSTOMIZATION: **
+         * *******************************************
+         * 
+         * Each bitWrite() line sets an LED on a shift register.
+         * 
+         * The case the line is placed in decides what byte of SextetStream data from StepMania we'll be reading (case 0 = Byte 0, case 1 = Byte 1, etc)
+         * (SextetStream data -> Light mappings are at https://github.com/stepmania/stepmania/blob/master/src/arch/Lights/LightsDriver_SextetStream.md#bit-meanings)
+         * The first bitWrite() argument is the shift register to write to (each shift register gets it's own byte of data)
+         * The second is the LED number on that register to set, 0-7
+         * The third is the value to set it to, HIGH or LOW (true or false). In this case, we bitRead() an individual bit, 0-6, of the current byte of SextetStream data.
+         * 
+         * Example:
+         * bitWrite(cabLEDs, 5, bitRead(receivedData, 0));
+         * This writes to LED position 5 on the cabLEDs shift register.
+         * It's value is set to the 0th bit in the current receivedData byte (place this in case 0, and it'll use Byte 0 of SextetStream data).
+        */
+            
         switch (lightBytePos) { //Which byte of lighting data are we now receiving?
-          case 0: //First byte of lighting data (cabinet lights)
-            //Read x bit from the received byte using bitRead(), then set the corresponding light to that state
+          case 0: //Lighting data byte 0: Cabinet lights
             bitWrite(cabLEDs, 0, bitRead(receivedData, 0)); //Marquee up left
             bitWrite(cabLEDs, 1, bitRead(receivedData, 1)); //Marquee up right
             bitWrite(cabLEDs, 2, bitRead(receivedData, 2)); //Marquee down left
             bitWrite(cabLEDs, 3, bitRead(receivedData, 3)); //Marquee down right
             
             bitWrite(etcLEDs, 0, bitRead(receivedData, 4)); //Bass L
-            //bitWrite(etcLEDs, 1, bitRead(receivedData, 5)); //Bass R (unless a song's lighting chart says otherwise, almost always the same state as Bass L)
+            //bitWrite(etcLEDs, 1, bitRead(receivedData, 5)); //Bass R (unless a song's lighting chart says otherwise, this is always the same state as Bass L)
             break;
             
-          case 1: //Second byte of lighting data (P1 menu button lights)
-            bitWrite(cabLEDs, 5, bitRead(receivedData, 0)); //P1 menu left (menu right usually same state)
+          case 1: //Byte 1: P1 menu button lights)
+            bitWrite(cabLEDs, 5, bitRead(receivedData, 0)); //P1 menu left (menu right almost always the same state, from what I can tell)
             bitWrite(cabLEDs, 4, bitRead(receivedData, 4)); //P1 start
 
             //bitWrite(etcLEDs, 2, bitRead(receivedData, 5)); //P1 select
             break;
-            
-          case 3: //Byte 4: P1 gameplay button lights 1-6
-            //The first 6 gameplay button lights are in receivedData.
+
+          //Byte 2 is for more P1 cabinet button lights that we currently don't read
+          
+          case 3: //Byte 3: P1 gameplay button lights 1-6
+            //The first 6 gameplay button lights are now in receivedData.
             //For this and P2's gameplay lights, we'll copy receivedData directly to p1LEDs.
             //BUT: We'll omit the highest 2 bytes of receivedData with "& 0x3F" (bitwise AND) since they don't contain lighting data.
+            
+            //(To customize what lights are mapped on the p1LEDs/p2LEDs shift registers, remove the below line and replace it with bitWrite() lines, described above)
             p1LEDs = receivedData & 0x3F;
             break;
 
-          case 4: //Byte 5: P1 gameplay button lights 7-12
-            //I can almost certainly bitwise this to be more compact. Buuut, nah.
+          case 4: //Byte 4: P1 gameplay button lights 7-12
+            //I can almost certainly bitwise this to be more compact, like with case 3 above. Buuut, nah.
             bitWrite(p1LEDs, 6, bitRead(receivedData, 0));
             bitWrite(p1LEDs, 7, bitRead(receivedData, 1));
             break;
 
-          //Bytes 6-7 are for more P1 gameplay buttons that we don't read
+          //Bytes 5-6 are for more P1 gameplay buttons that we don't read
           
-          case 7: //Byte 8: P2 menu
-            bitWrite(cabLEDs, 7, bitRead(receivedData, 0)); //P2 menu left (menu right usually same state)
+          case 7: //Byte 7: P2 menu
+            bitWrite(cabLEDs, 7, bitRead(receivedData, 0)); //P2 menu left (menu right almost always the same state, from what I can tell)
             bitWrite(cabLEDs, 6, bitRead(receivedData, 4)); //P2 start
 
             //bitWrite(etcLEDs, 3, bitRead(receivedData, 5)); //P2 select
             break;
-            
-          case 9: //Byte 10: P2 gameplay button lights 1-6
+
+          //Byte 8 is for more P2 menu button lights that we don't read
+          
+          case 9: //Byte 9: P2 gameplay button lights 1-6
             //Same as P1's gameplay lights, copy the lower 6 bis of receivedData to p2LEDs (high 2 bits omitted with & 0x3F)
             p2LEDs = receivedData & 0x3F;
             break;
 
-          case 10: //Byte 11: P2 gameplay button lights 7-12
+          case 10: //Byte 10: P2 gameplay button lights 7-12
             bitWrite(p2LEDs, 6, bitRead(receivedData, 0));
             bitWrite(p2LEDs, 7, bitRead(receivedData, 1));
             break;
 
-          //Bytes 12-13 are for more P2 gameplay buttons we don't read
+          //Bytes 11-12 are for more P2 gameplay buttons we don't read
           
         }
         lightBytePos++; //Finally, update how many bytes of lighting data we've received.

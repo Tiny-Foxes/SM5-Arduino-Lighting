@@ -43,7 +43,9 @@ To wire up more lights, you can use **Shift Registers** to get more output pins 
 
 [Adafruit has a great tutorial on them here](https://learn.adafruit.com/adafruit-arduino-lesson-4-eight-leds/overview) thats well worth a read. TL;DR: Wire up your Arduino like this, and you're off to the races:
 
+![Shift register wiring diagram](/Wiring-ShiftRegisters.png)
 
+[This page also has the **game-specific mappings** for the Player gameplay lights](https://github.com/stepmania/stepmania/blob/master/src/arch/Lights/LightsDriver_SextetStream.md#bit-meanings), as well as more info on what other lights in SM can be mapped to LEDs via this code.
 
 By default, the code outputs data to 4 shift registers: 1 per player for gameplay buttons (like arrow panel lights on a DDR cab), 1 for cabinet lighting, and 1 for the bass light (with tons of extra pins if you want to mod the code to control even *more* lights).
 
@@ -54,6 +56,10 @@ By default, the code outputs data to 4 shift registers: 1 per player for gamepla
 > **Remove** the **two slashes** to uncomment this line, and the code will output to shift registers instead of single LEDs.
 
 **To change what pins** the shift registers connect to, find the section near the top with the `#define PIN_SHIFT_CLOCK`, `LATCH` and `DATA` lines - You can change these numbers to any Arduino pin.
+
+**To change what lights** are mapped to what shift registers, you can easily modify `void readSerialLightingData()` for what you need.
+See the comments near that function for more info.
+
 
 ---
 
