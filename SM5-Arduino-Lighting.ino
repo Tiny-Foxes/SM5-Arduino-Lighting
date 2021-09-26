@@ -20,7 +20,7 @@
 //  - Using shift registers (use only 3 pins for all the lights)? Uncomment the below line
 
 
-#define USE_SHIFT_REGISTERS
+//#define USE_SHIFT_REGISTERS
 
 
 

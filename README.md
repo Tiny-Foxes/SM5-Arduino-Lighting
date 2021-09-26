@@ -1,8 +1,8 @@
 # SM5-Arduino-Lighting
-**Use an Arduino to get game-controlled lights in StepMania 5!**
+**Use an Arduino to get game-controlled lights in StepMania 5/Project Outfox!**
 
 ## What's it do?
-StepMania 5 can be set up to control lights you hook up to an Arduino as if they were lights on an Arcade cabinet.
+StepMania 5/Project Outfox can be set up to control lights you hook up to an Arduino as if they were lights on an Arcade cabinet.
 
 This Arduino code will help you do that!
 
@@ -11,7 +11,7 @@ This Arduino code will help you do that!
 ## Requirements
 To set this up, all you need is:
  * StepMania 5.x (tested on StepMania 5.3/Project Outfox, free download at https://projectmoon.dance/downloads)
- * Windows or Linux (Windows lighting only supported on StepMania Outfox)
+ * Windows or Linux
  * An Arduino (Nearly any model should work, like the Uno, Mega, Micro, etc)
  * Lights to control (LEDs? Dance pad lights? Neons? Anything goes!)
 
@@ -29,7 +29,7 @@ If you go this route, you don't need to modify the code! Just wire up your Ardui
 
 ![Direct wiring diagram](/Wiring-Direct.png)
 
-By default, the code controls nearly all the lights for a complete DDR/ITG-style setup - 4 arrow panel and start/menu button lights for each player, 4 marquee lights, and a bass neon light.
+Nearly all lights for a complete DDR/ITG-style setup are controlled in this mode - 4 arrow panel and start/menu button lights for each player, 4 marquee lights, and a bass neon light.
 
 **To change what pin** each light is on, find the section near the top with a ton of `#define PIN_<something>_<something>` lines - you can change these numbers to **any Arduino pin**, even the analog input pins.
 
@@ -45,7 +45,7 @@ To wire up more lights, you can use **Shift Registers** to get more output pins 
 
 ![Shift register wiring diagram](/Wiring-ShiftRegisters.png)
 
-[This page also has the **game-specific mappings** for the Player gameplay lights](https://github.com/stepmania/stepmania/blob/master/src/arch/Lights/LightsDriver_SextetStream.md#bit-meanings), as well as more info on what other lights in SM can be mapped to LEDs via this code.
+[This StepMania Wiki page has the **game-specific mappings** for the Player gameplay lights](https://github.com/stepmania/stepmania/blob/master/src/arch/Lights/LightsDriver_SextetStream.md#bit-meanings), as well as more info on what other lights in SM can be mapped to LEDs via this code.
 
 By default, the code outputs data to 4 shift registers: 1 per player for gameplay buttons (like arrow panel lights on a DDR cab), 1 for cabinet lighting, and 1 for the bass light (with tons of extra pins if you want to mod the code to control even *more* lights).
 
@@ -57,19 +57,37 @@ By default, the code outputs data to 4 shift registers: 1 per player for gamepla
 
 **To change what pins** the shift registers connect to, find the section near the top with the `#define PIN_SHIFT_CLOCK`, `LATCH` and `DATA` lines - You can change these numbers to any Arduino pin.
 
-**To change what lights** are mapped to what shift registers, you can easily modify `void readSerialLightingData()` for what you need.
+**To change what lights** are mapped to what shift registers, you can easily modify the function `void readSerialLightingData()` for what you need.
 See the comments near that function for more info.
 
 
 ---
 
 
+## Step 1.5: Wiring High-Power Lights
+
+The above schematics are all good and fun if all you want to control is a small LED on a breadboard... but what if you have bigger dreams?
+
+If you want to control bigger lights, like 12V LED modules, an N-Channel MOSFET (like [this](https://www.sparkfun.com/products/10213) or [this](https://www.adafruit.com/product/355) will be your best friend as long as you keep the light's voltage/current under the MOSFET's maximum specs.
+
+[I'd **highly** recommend checking out this site](http://bildr.org/2012/03/rfp30n06le-arduino/) for a brief guide on how to properly hook up/use a MOSFET.
+
+Just wire a MOSFET up to each Arduino/Shift Register pin you want to have control a light, as below:
+![MOSFET wiring diagram](/Wiring-MOSFET.png)
+
+And if you want to go even BIGGER than that and feel comfortable working with 120VAC? Look into using a Solid State Relay (SSR) to control high voltages - this is the tech some old DDR cabs use to turn on/off the neon sign transformers for the bass neons.
+
+
+
+
+---
+
 
 ## Step 2: Software Setup
 There's two methods that'll work to set up StepMania to output lights data to an Arduino:
 
 ### Windows
-On Windows, the Win32Serial Lights Driver is used. As far as I can tell, this driver is only in StepMania 5.3 and on [the driver author's StepMania fork](https://github.com/skogaby/stepmania/).
+On Windows, the Win32Serial Lights Driver is used. As far as I can tell, this driver is only available in StepMania 5.3 and on [the driver author's StepMania fork](https://github.com/skogaby/stepmania/).
 
 1) In `Preferences.ini`, set `LightsDriver=Win32Serial` and `LightsComPort=` to whatever COM port your Arduino is on 
    - Tip: The port is the one you choose in the Arduino IDE to upload code, along the lines of `COM2`, etc).
@@ -105,4 +123,9 @@ With SextetStreamToFile, Stepmania will write all the lighting data to a file yo
    - Socat should work here too: `socat <sextet filename/path> <arduino device name>`
 
 
-## Step 3: Enjoy! :D
+### Step 3: Enjoy!
+
+
+
+
+> SM5-Arduino-Lighting (2021), by 48productions. Feel free to ask me any questions/comments on this project, either here or through Discord. I'm in a number of rhythm game-related servers.
