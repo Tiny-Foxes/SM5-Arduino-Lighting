@@ -68,7 +68,9 @@ See the comments near that function for more info.
 
 The above schematics are all good and fun if all you want to control is a small LED on a breadboard... but what if you have bigger dreams?
 
-If you want to control bigger lights, like 12V LED modules, an N-Channel MOSFET (like [this](https://www.sparkfun.com/products/10213) or [this](https://www.adafruit.com/product/355) will be your best friend as long as you keep the light's voltage/current under the MOSFET's maximum specs.
+If you want to control bigger lights, like 12V LED modules, an N-Channel MOSFET (like [this](https://www.sparkfun.com/products/10213) or [this](https://www.adafruit.com/product/355)) will be your best friend as long as you keep the light's voltage/current under the MOSFET's maximum specs.
+
+Want more convenient wiring than bare MOSFETs on a breadboard? [I've seen another community member](https://discord.com/channels/448309553394614272/448313610976886785/958230658478649374) on the Rhythm Game Cabs Discord have good luck with MOSFET modules from Amazon, that you wire via screw terminals.
 
 [I'd **highly** recommend checking out this site](http://bildr.org/2012/03/rfp30n06le-arduino/) for a brief guide on how to properly hook up/use a MOSFET.
 
